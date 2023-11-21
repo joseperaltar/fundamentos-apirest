@@ -28,9 +28,17 @@ async function saveFavorites(id) {
     body: JSON.stringify({"image_id": id, "sub_id":"user-123"})
   });
 
-  if(res.status !== 200) {
-    console.error('Ha habido un error guardando tu imagen en favoritos');
-  }
+  if(res.status !== 200) console.error(res);
+  else {
+    let newImages = await fetchImages(`${API_URL}/favourites?api_key=${API_KEY}`)
+    document.querySelectorAll(".favorite-cats .images-wrapper .random-cat")
+      .forEach((element)=>{
+        document.querySelector(".favorite-cats .images-wrapper").removeChild(element);
+      });
+    let elements = newImages.map(kittie => 
+      createFavoriteImage(kittie.image.url, kittie.id, removeFavorites));
+    favoriteCatsSection.append(...elements);
+  };
 }
 
 async function removeFavorites(id) {
@@ -42,9 +50,17 @@ async function removeFavorites(id) {
     },
   });
 
-  if(res.status !== 200) {
-    console.error('Ha habido un error guardando tu imagen en favoritos');
-  }
+  if(res.status !== 200) console.error('Ha habido un error guardando tu imagen en favoritos');
+  else {
+    let newImages = await fetchImages(`${API_URL}/favourites?api_key=${API_KEY}`);
+    document.querySelectorAll(".favorite-cats .images-wrapper .random-cat")
+      .forEach((element)=>{
+        document.querySelector(".favorite-cats .images-wrapper").removeChild(element);
+      });
+    let elements = newImages.map(kittie => 
+      createFavoriteImage(kittie.image.url, kittie.id, removeFavorites));
+    favoriteCatsSection.append(...elements);
+  };
 }
 
 async function main() {
